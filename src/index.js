@@ -94,6 +94,7 @@ export default class PercentageCircle extends Component {
     textStyle: Text.propTypes.style,
     updateText: PropTypes.func,
     onTimeElapsed: PropTypes.func,
+    onTick: PropTypes.func,
   };
 
   static defaultProps = {
@@ -106,6 +107,7 @@ export default class PercentageCircle extends Component {
     containerStyle: null,
     textStyle: null,
     onTimeElapsed: () => null,
+    onTick: () => null,
     updateText: (elapsedSeconds, totalSeconds) =>
       (totalSeconds - elapsedSeconds).toString(),
   };
@@ -117,9 +119,9 @@ export default class PercentageCircle extends Component {
     this.restartAnimation()
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState(getInitialState(nextProps), this.restartAnimation)
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   this.setState(getInitialState(nextProps), this.restartAnimation)
+  // }
 
   onCircleAnimated = () => {
     const secondsElapsed = this.state.secondsElapsed + 1
@@ -135,8 +137,10 @@ export default class PercentageCircle extends Component {
         ...getInitialState(this.props),
         secondsElapsed,
         text: updatedText,
-      },
-      callback,
+      }, () => {
+      callback()
+      this.props.onTick(secondsElapsed)
+    },
     )
   };
 
