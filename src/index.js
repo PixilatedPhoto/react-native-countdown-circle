@@ -206,6 +206,7 @@ export default class PercentageCircle extends Component {
         <Text style={this.props.textStyle}>
           {this.state.text}
         </Text>
+        {this.props.children}
       </View>
     )
   }
